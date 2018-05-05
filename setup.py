@@ -5,46 +5,9 @@ try:
 except ImportError:
     from distutils.core import setup
     from distutils.command.install import install
-try:
-    # For Python 3.0 and later
-    from urllib.request import urlopen
-except ImportError:
-    # Fall back to Python 2's urllib2
-    from urllib2 import urlopen
-from distutils.dir_util import mkpath, copy_tree
 import glob
 import io
 import zipfile
-
-
-class DownloadAndInstall(install):
-    user_options = install.user_options + [
-            ('corpora-zip-url=', None,
-                'URL pointing to .zip file of corpora data ' +
-                '(defaults to current master on GitHub)')
-            ]
-
-    def initialize_options(self, *args, **kwargs):
-        install.initialize_options(self, *args, **kwargs)
-        self.corpora_zip_url = None
-
-    def run(self):
-        if self.corpora_zip_url is None:
-            self.corpora_zip_url = \
-                "https://github.com/dariusk/corpora/archive/master.zip"
-        print("Installing corpora data from " + self.corpora_zip_url)
-        mkpath("./corpora-download")
-        resp = urlopen(self.corpora_zip_url).read()
-        remote = io.BytesIO(resp)
-        zf = zipfile.ZipFile(remote, "r")
-        zf.extractall("corpora-download")
-        try:
-            data_dir = glob.glob("./corpora-download/*/data")[0]
-        except IndexError:
-            raise IndexError(
-                "malformed corpora archive: expecting a subdirectory '*/data'")
-        copy_tree(data_dir, "pycorpora/data")
-        install.run(self)
 
 
 setup(
@@ -59,6 +22,11 @@ setup(
     license="LICENSE.txt",
     long_description=open("README.rst").read(),
     keywords="nlp corpus text language",
+    entry_points = {
+        'console_scripts': [
+            "pycorpora-download = pycorpora.downloader:main"
+        ]
+    },
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
@@ -79,5 +47,4 @@ setup(
         "Programming Language :: Python :: Implementation :: PyPy",
         "Topic :: Artistic Software",
         "Topic :: Scientific/Engineering :: Artificial Intelligence"],
-    cmdclass={'install': DownloadAndInstall},
 )
