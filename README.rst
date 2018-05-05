@@ -29,24 +29,22 @@ Installation
 Installation by hand::
 
     python setup.py install
+    pycorpora-download
 
 Installation with pip::
 
     pip install --no-cache-dir pycorpora
+    pycorpora-download
 
 The package does not include data from the Corpora Project; instead, the data
-is downloaded when the package is installed (using either of the methods
-above). By default, the "master" branch of the `Corpora Project GitHub
-repository <https://github.com/dariusk/corpora>`_ is used as the source for the
-data. You can specify an alternative URL to download the data from using the
-argument ``--corpora-zip-url`` on the command line with either of the two
-methods above::
+is downloaded by the `pycorpora-download` script (installed when
+the pycorpora package is installed). By default, the "master" branch of the
+ `Corpora Project GitHub repository <https://github.com/dariusk/corpora>`_ is
+used as the source for the data. You can specify an alternative URL to
+download the data from using the argument ``--corpora-zip-url`` on the command
+line when running `pycorpora-download`::
 
-    python setup.py install --corpora-zip-url=https://github.com/dariusk/corpora/archive/master.zip
-
-... or, with ``pip``::
-
-    pip install pycorpora --install-option="--corpora-zip-url=https://github.com/dariusk/corpora/archive/master.zip"
+    pycorpora-download --corpora-zip-url=https://github.com/dariusk/corpora/archive/master.zip
 
 (The intention of ``--corpora-zip-url`` is to let you install Corpora Project
 data from a particular branch, commit or fork, so that changes to the bleeding
@@ -55,9 +53,9 @@ edge of the project don't break your code.)
 Update
 ------
 
-Update Corpora Project data by reinstalling with pip::
+Update Corpora Project data by running the `pycorpora-download` script again::
 
-    pip install --upgrade --force-reinstall pycorpora
+    pycorpora-download
 
 Usage
 -----
